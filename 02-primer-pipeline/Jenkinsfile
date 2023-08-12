@@ -12,7 +12,10 @@ pipeline {
         stage('docker push') {
             steps {
                 script {
-                    sh "docker push andydikeee/homer_page:1.0.0-${BUILD_ID}"
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
+                        sh "docker push andydikeee/homer_page:1.0.0-${BUILD_ID}"
+                    }
                 }
             }
         }
